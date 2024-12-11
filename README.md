@@ -1,6 +1,6 @@
 ### About
 This is a simple SQL manipultion tool that uses SQLite3.
-NOTE: You should install sqlite3 package in order to build this program.
+**NOTE**: You should install [sqlite3](https://github.com/sqlite/sqlite) package in order to build this program.
 ### Functionality
 1. Inserting keys and values
 2. Editing existing values
