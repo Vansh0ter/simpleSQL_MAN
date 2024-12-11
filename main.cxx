@@ -30,6 +30,10 @@ public:
         std::string sql = "DELETE FROM records WHERE " + fieldName + " = '" + value + "';";
         executeSQL(sql.c_str());
     }
+    void deleteRecord(int id) {
+        std::string sql = "DELETE FROM records WHERE id = " + std::to_string(id) + ";";
+        executeSQL(sql.c_str());
+    }
 	
 	void displayAllRecords() {
         const char* sql = "SELECT * FROM records;";
@@ -164,11 +168,25 @@ int main() {
             }
             case 2: { // Delete
                 std::string fieldName, value;
+                int mode, id;
+                std::cout << "Do you want to search by id[1] or by key(name)+value[2](Press 1 or 2) ";
+                std::cin >> mode;
+                if (mode == 1) {
+					std::cout << "Specify ID: ";
+					std::cin >> id;
+					db.deleteRecord(id); 
+				}
+				else if (mode > 1)
+				{
                 std::cout << "Search by key(name) or by value ? ";
                 std::cin >> fieldName;
                 std::cout << "Specify value: ";
-                std::cin >> value;
-                db.deleteRecord(fieldName, value);
+                std::cin >> value; 
+                db.deleteRecord(fieldName, value); 
+                }
+                else 
+                std::cout << "Wrong input, try again" << std::endl;
+
                 break;
             }
             case 3: { // Search
