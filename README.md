@@ -1,7 +1,7 @@
-### About
-This is a simple SQL manipultion tool that uses SQLite3.
+## About
+A simple SQL manipultion tool that uses SQLite3.
 **NOTE**: You should install [sqlite3](https://github.com/sqlite/sqlite) package in order to build this program.
-### Functionality
+## Functionality
 1. Inserting keys and values
 2. Editing existing values
 3. Deleting
@@ -9,7 +9,7 @@ This is a simple SQL manipultion tool that uses SQLite3.
 5. Restoring DB's from existing backups
 6. Appending data into a table from .csv file
 7. Displaying a table
-### Building
+## Building
 ```sh
 g++ main.cxx -l sqlite3 -o main
 ```
