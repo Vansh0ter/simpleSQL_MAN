@@ -7,7 +7,8 @@ This is a simple SQL manipultion tool that uses SQLite3.
 3. Deleting
 4. Creating a backup
 5. Restoring DB's from existing backups
-6. Displaying a table
+6. Appending data into a table from .csv file
+7. Displaying a table
 ### Building
 ```sh
 g++ main.cxx -l sqlite3 -o main
