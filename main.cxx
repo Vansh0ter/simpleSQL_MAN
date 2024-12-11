@@ -2,6 +2,7 @@
 #include <sqlite3.h>
 #include <string>
 #include <fstream>
+#include <sstream>
 
 class Database {
 public:
@@ -78,6 +79,30 @@ public:
         std::ofstream dest(backupFileName, std::ios::binary);
         dest << source.rdbuf();
     }
+    void importFromCsv(const std::string& csv_file) {
+        std::ifstream file(csv_file);
+        std::string line;
+
+        if (!file.is_open()) {
+            std::cerr << "Could not open the file: " << csv_file << std::endl;
+            return;
+        }
+
+        // Skipping header
+        getline(file, line);
+
+        while (getline(file, line)) {
+            std::stringstream ss(line);
+            std::string name, value;
+
+            // comma separator only
+            if (getline(ss, name, ',') && getline(ss, value, ',')) {
+                addRecord(name, value); 
+            }
+        }
+        file.close();
+    }
+
 
     void restoreDatabase(const std::string& backupFileName) {
         std::ifstream source(backupFileName, std::ios::binary);
@@ -109,6 +134,7 @@ void displayMenu()
     std::cout << "6. Restore DB from backup" << std::endl;
     std::cout << "7. Display DB" << std::endl;
     std::cout << "8. Clear Screen" << std::endl; // Dumb solution
+    std::cout << "9. CSV import" << std::endl;// xlnt's PKGBUILD is horrendous. So unfortunately, no xlsx import support
     std::cout << "0. Exit" << std::endl;
 }
 
@@ -129,7 +155,7 @@ int main() {
         switch (choice) {
             case 1: { // Add
                 std::string name, value;
-                std::cout << "Specify a key: ";
+                std::cout << "Specify a key(name): ";
                 std::cin >> name;
                 std::cout << "Specify a value: ";
                 std::cin >> value;
@@ -138,7 +164,7 @@ int main() {
             }
             case 2: { // Delete
                 std::string fieldName, value;
-                std::cout << "Search by key or by value ? ";
+                std::cout << "Search by key(name) or by value ? ";
                 std::cin >> fieldName;
                 std::cout << "Specify value: ";
                 std::cin >> value;
@@ -147,7 +173,7 @@ int main() {
             }
             case 3: { // Search
                 std::string fieldName, value;
-                std::cout << "Search by key or by value ? ";
+                std::cout << "Search by key(name) or by value ? ";
                 std::cin >> fieldName;
                 std::cout << "Specify value: ";
                 std::cin >> value;
@@ -180,6 +206,17 @@ int main() {
 			}
 			case 8: {
 				clearScreen();
+				break;
+			}
+			case 9: {
+				std::string csv_file;
+				std::cout << "NOTE: Only comma(',') separators are being supported " << std::endl;
+				std::cout << "NOTE: Header WILL BE skipped durring the import procedure" << std::endl;
+				std::cout << "NOTE: By importing a CSV file new data will be APPENDED. Existing data WILL NOT BE OVERWRITED" << std::endl;
+				std::cout << "Path/to/.csv file ";
+				std::cin >> csv_file;
+				db.importFromCsv(csv_file);
+				std::cout << "CSV file imported successfully" << std::endl;
 				break;
 			}
             case 0: // Exit
